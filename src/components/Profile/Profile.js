@@ -1,20 +1,34 @@
-import React from 'react';
-import backgroundImg from '../../assets/profile-bg.webp'
-import profileImg from '../../assets/profile-img.jpg'
-
+import React,{useContext} from 'react';
+import { DataContext } from './ProfileHeader';
+import Introduction from '../ProfileDetail/Introduction';
+import Contact from '../ProfileDetail/Contact';
+import Education from '../ProfileDetail/Education';
+import Career from '../ProfileDetail/Career';
+import Skill from '../ProfileDetail/Skill';
 const Profile = () => {
+  const Ctx=useContext(DataContext);
   return (
-    <div className='px-10 md:px-40 w-full'>
-        <div>
-            <div className='h-12 '><img src={backgroundImg} alt='Background' className=' h-40 w-full' /></div>          
-            <div className='flex justify-center'>
-                <img src={profileImg} alt='Profile' className='shadow-md rounded-full max-w-full align-middle border-none'/>
-            </div>            
-        </div>
-        <div>
-          
-        </div>
+    <div className=' bg-slate-300 auto shadow-2xl'>
+        <div className='self-center hover:leading-loose'>
+          {
+            (()=>{
+              switch(Ctx){
+                case 'introduction':
+                  return <Introduction/>;
+                case 'education':
+                  return <Education/>;
+                case 'career':
+                  return <Career/>;
+                case 'skills':
+                  return <Skill/>;
+                default:
+                return  <Contact/>;
+              }
+            })()
+          }          
+        </div>                                              
     </div>
+    
   )
 }
 
