@@ -1,9 +1,9 @@
 import React from "react";
-import Profile from "./components/Profile/Profile";
+import ProfileHeader from "./components/Profile/ProfileHeader";
 function App() {
   return (
     <div className="">
-      <Profile/>
+      <ProfileHeader/>
     </div>
   );
 }
