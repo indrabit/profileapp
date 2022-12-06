@@ -12,7 +12,7 @@ const Skill = () => {
   return (
     <div className='flex items-center justify-center pt-10 flex-col'>        
     <h1 className='font-semibold text-xl mt-5'>Technical Skill List</h1>
-      <div className='bg-white shadow-lg border-gray-600 rounded-lg p-10 mt-2  w-10/12'>
+      <div className='bg-white shadow-lg border-gray-600 rounded-lg p-10 mt-2 w-10/12'>
       {
         skillList.map((lst,i)=>(
           <h4 className='py-4 text-teal-300 hover:text-teal-900 duration-200'>{i+1}. {lst.name}</h4>
