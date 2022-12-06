@@ -2,7 +2,7 @@ import React from "react";
 import Profile from "./components/Profile/Profile";
 function App() {
   return (
-    <div className="bg-gray-300">
+    <div className="">
       <Profile/>
     </div>
   );
