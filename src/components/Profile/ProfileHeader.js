@@ -7,9 +7,9 @@ const ProfileHeader = () => {
     const [active, setActive]=useState(0);
     const Menus=[
         { name: "introduction",value:'Introduction' },
-        { name: "education",value:'Education Background' },
-        { name: "career",value:'Career History' },
         { name: "skills",value:'Skills' },
+        { name: "career",value:'Career History' },
+        { name: "education",value:'Education Background' },                
         { name: "contact", value:'Contact' },
     ] 
     const handleMenu=(menu,i)=>{
@@ -27,16 +27,17 @@ const ProfileHeader = () => {
             </div>        
         </div>
         {/* info */}
-        <div className='flex justify-center -mt-8  md:mt-5 md:mb-3.5'>    
+        <div className='justify-center -mt-8  md:mt-5 md:mb-3.5'>    
             <h1 className="text-center font-bold text-3xl">Indra Shrestha</h1>            
+            <h4 className="text-center font-bold text-slate-600 text-opacity-70">Full Stack Developer</h4>            
         </div>              
         <div className="w-full md:flex justify-center">            
-            <div className=" md:flex  mb-10">
-                <ul className='flex relative'>
+            <div className=" md:flex  mb-8">
+                <ul className='flex relative decoration-slice'>
                       {Menus.map((menu, i) => (
-                        <li key={i} className="w-40">
-                            <h4 className="flex flex-col text-center pt-4" onClick={()=>handleMenu(menu.name,i)}>
-                                <span className={`text-xl cursor-pointer duration-500 ${i === active && "-mt-6 text-slate-400"}`}></span>
+                        <li key={i} className="min-w-48 px-1 rounded-lg">
+                            <h4 className="flex flex-col text-center pt-4 px-0" onClick={()=>handleMenu(menu.name,i)}>
+                                <span className={`text-2xl cursor-pointer duration-500 ${i === active && "-mt-2 text-slate-400"}`}></span>
                                 <span className={` ${active === i? "translate-y-10 duration-700 bg-slate-500":"bg-slate-400 translate-y-10"} `}>
                                     {menu.value}
                                 </span>

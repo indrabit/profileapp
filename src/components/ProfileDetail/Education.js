@@ -1,12 +1,14 @@
 import React from 'react';
 
 const Education = () => {
-    const coruselist=[{course:'Diploma In Software Development',complete:'2022',campus:'TAFE Queensland, Coomera'},
+    const coruselist=[
     {course:'Masters of Information System Technology ',complete:'2013',campus:'University of Southern Queensland (USQ), Australia'},
+    {course:'Bachelor In Information Technology ',complete:'2005',campus:'Purwanchal University, Nepal'},    
     {course:'Advanced Diploma In Web Development & Multimedia',complete:'2010',campus:'Central College, Australia'},
-    {course:'Bachelor In Information Technology ',complete:'2005',campus:'Purwanchal University, Nepal'}]
+    {course:'Diploma In Software Development',complete:'2022',campus:'TAFE Queensland, Coomera'}
+    ]
   return (
-    <div className=' flex items-center justify-center pt-10 flex-col'>        
+    <div className=' flex items-center justify-center pt-10 flex-col'>                
         <h1 className='font-semibold text-xl mt-5'>Education Background</h1>
         <div className="w-full md:flex justify-center">  
 

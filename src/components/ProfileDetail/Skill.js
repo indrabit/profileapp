@@ -2,11 +2,13 @@ import React from 'react';
 
 
 const Skill = () => {
-  const skillList=[{name:'Database Design and Development (MSSQL, MySQL)'},
-                  {name:'Software Programming (Asp.Net core, Java, C#, Angular/React, React Native, Django, JQuery, JavaScript, HTML5, CSS)'},
-                  {name:'Problem solving abilities'},
-                  {name:'Business analysis'},
-                  {name:'Proficiency in core programming language'},
+  const skillList=[{name:'•	Database Design and Development (MSSQL, MySQL, PostgreSQL, SQLite, Mongo DB)'},
+                  {name:'API (Laravel, Django Python, Node.js, Express.js, Strapi, Postman)'},
+                  {name:'Mobile App, Web Application and Desktop Application (Programming skills: Python Django, React Native, Asp.Net core/ C#, LINQ, Lambda expression, Java, PHP/ Laravel, Angular/React, jQuery, JavaScript, HTML5, CSS, Tailwind, Bootstrap)'},
+                  {name:'AWS Cloud, Microsoft Azure Cloud and Goggle Cloud Configuration '},
+                  {name:'Apple and Google play console configuration to deploy mobile app'},
+                  {name:'Mobile and Webbased Plateform Screen Design in Figma'},
+                  {name:'Computer troubleshooting'},
                   {name:'Ability to work in a team based environment'},
                   {name:'Independent judgment within programmed and policy guidelines'}]
   return (
@@ -15,7 +17,7 @@ const Skill = () => {
       <div className='bg-white shadow-lg border-gray-600 rounded-lg p-10 mt-2 w-10/12'>
       {
         skillList.map((lst,i)=>(
-          <h4 className='py-4 text-teal-300 hover:text-teal-900 duration-200'>{i+1}. {lst.name}</h4>
+          <h4 className='py-2 text-teal-600 hover:text-teal-900 duration-200'>{i+1}. {lst.name}</h4>
         ))
       }          
       </div>
