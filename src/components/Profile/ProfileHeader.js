@@ -1,64 +1,98 @@
-import React,{useState,createContext} from 'react';
+import React, { useState, createContext } from 'react';
 import Profile from './Profile';
-import profileImg from '../../assets/profile-img.jpg'
-export const DataContext=createContext();
+import profileImg from '../../assets/profile-img.jpg';
+
+export const DataContext = createContext();
+
 const ProfileHeader = () => {
-    const [selected, setSelected] = useState('introduction'); 
-    const [active, setActive]=useState(0);
-    const Menus=[
-        { name: "introduction",value:'Introduction' },
-        { name: "skills",value:'Skills' },
-        { name: "career",value:'Career History' },
-        { name: "education",value:'Education Background' },                
-        { name: "contact", value:'Contact' },
-    ] 
-    const handleMenu=(menu,i)=>{
+    const [selected, setSelected] = useState('introduction');
+    const [active, setActive] = useState(0);
+    
+    const Menus = [
+        { name: "introduction", value: 'Introduction' },
+        { name: "skills", value: 'Skills' },
+        { name: "career", value: 'Experience' },
+        { name: "education", value: 'Education' },
+        { name: "contact", value: 'Contact' },
+    ];
+
+    const handleMenu = (menu, i) => {
         setActive(i);
         setSelected(menu);
-    }  
-  return (
-    <>
-    <div>
-        <div className='w-full'>
-            <div className='justify-center'>
-                <div className="w-full md:w-11/12 lg:w-4/6 h-48 mx-auto  flex justify-center bg-gray-100 rounded-bl-lg  bg-gradient-to-b from-gray-100 via-gray-100 to-gray-400 ">                                       
-                    <img src={profileImg} alt='Profile' className='rounded-full  border-4 border-white w-40 h-40 top-14 md:absolute' />                   
-                </div>                
-            </div>        
+    };
+
+    return (
+        <div className="w-full max-w-6xl mx-auto">
+            {/* Profile Header */}
+            <div className="relative bg-gradient-to-r from-orange-50 to-white rounded-t-xl overflow-hidden">
+                {/* Background Banner */}
+                <div className="h-32 bg-gradient-to-r from-orange-200 to-blue-300 w-full"></div>
+                
+                {/* Profile Picture and Basic Info */}
+                <div className="flex flex-col items-center px-4 pb-6 relative -mt-16">
+                    <img 
+                        src={profileImg} 
+                        alt="Profile" 
+                        className="rounded-full border-4 border-white w-32 h-32 object-cover shadow-lg"
+                    />
+                    <div className="text-center mt-4">
+                        <h1 className="text-3xl font-bold text-gray-900">Indra Shrestha</h1>
+                        <h2 className="text-lg text-blue-700 font-medium">Full Stack Developer</h2>
+                        <p className="text-gray-600 mt-1">Gold Coast, Australia | Australian Citizen</p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Navigation Tabs */}
+            <div className="px-4 md:px-6">
+                <div className="flex overflow-x-auto scrollbar-hide -mb-px">
+                    {Menus.map((menu, i) => (
+                        <button
+                            key={i}
+                            onClick={() => handleMenu(menu.name, i)}
+                            className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors duration-300
+                                ${
+                                    active === i
+                                        ? 'border-orange-500 text-orange-600'
+                                        : 'border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
+                                }`}
+                        >
+                            {menu.value}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {/* Content Area */}
+            <div className="bg-white rounded-b-xl shadow-md overflow-hidden border border-gray-200">
+                <DataContext.Provider value={selected}>
+                    <Profile />
+                </DataContext.Provider>
+            </div>
+
+            {/* Mobile bottom navigation */}
+            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 flex justify-around py-2">
+                {Menus.map((menu, i) => (
+                    <button
+                        key={i}
+                        onClick={() => handleMenu(menu.name, i)}
+                        className={`p-2 flex flex-col items-center text-xs ${
+                            active === i ? 'text-orange-600' : 'text-gray-600'
+                        }`}
+                    >
+                        <span className="text-lg">
+                            {i === 0 && '👋'}
+                            {i === 1 && '💻'}
+                            {i === 2 && '💼'}
+                            {i === 3 && '🎓'}
+                            {i === 4 && '📞'}
+                        </span>
+                        <span>{menu.value}</span>
+                    </button>
+                ))}
+            </div>
         </div>
-        {/* info */}
-        <div className='justify-center -mt-8  md:mt-5 md:mb-3.5'>    
-            <h1 className="text-center font-bold text-3xl">Indra Shrestha</h1>            
-            <h4 className="text-center font-bold text-slate-600 text-opacity-70">Full Stack Developer</h4>            
-        </div>              
-        <div className="w-full md:flex justify-center">            
-            <div className=" md:flex  mb-8">
-                <ul className='flex relative decoration-slice'>
-                      {Menus.map((menu, i) => (
-                        <li key={i} className="min-w-48 px-1 rounded-lg">
-                            <h4 className="flex flex-col text-center pt-4 px-0" onClick={()=>handleMenu(menu.name,i)}>
-                                <span className={`text-2xl cursor-pointer duration-500 ${i === active && "-mt-2 text-slate-400"}`}></span>
-                                <span className={` ${active === i? "translate-y-10 duration-700 bg-slate-500":"bg-slate-400 translate-y-10"} `}>
-                                    {menu.value}
-                                </span>
-                            </h4>
-                        </li>
-                    ))}              
-                </ul>                
-            </div>                    
-        </div>               
-    </div>
-    <div className='w-full flex justify-center'>
-        <div className='bg-white border rounded-lg shadow-md w-full md:w-11/12 lg:w-4/6 h-48 mx-auto '>
-            <DataContext.Provider value={selected}>                    
-                <Profile/>        
-            </DataContext.Provider>
-        </div>
-    </div>
-    
-    
-    </>
-  )
-}
+    );
+};
 
 export default ProfileHeader;
