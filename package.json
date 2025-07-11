@@ -53,11 +53,21 @@
     "tailwindcss": "^3.2.4"
   },
   "jest": {
-    "collectCoverage": true,
-    "coverageReporters": [
-      "lcov",
-      "text"
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!src/**/*.d.ts",
+      "!src/setupTests.js",
+      "!src/serviceWorker.js",
+      "!src/index.js"
     ],
-    "testResultsProcessor": "jest-junit"
+    "coverageReporters": ["lcov", "text"],
+    "coverageThreshold": {
+      "global": {
+        "branches": 0,
+        "functions": 0,
+        "lines": 0,
+        "statements": 0
+      }
+    }
   }
 }

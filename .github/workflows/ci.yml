@@ -2,67 +2,27 @@ name: React CI Pipeline
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, origin]
   pull_request:
-    branches: [main, develop]
+    branches: [main, orgin]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [18.x]
-
     steps:
       - uses: actions/checkout@v4
       
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18
           cache: 'npm'
       
       - name: Install dependencies
-        run: |
-          npm install
-          npm install --save-dev jest-junit # Ensure JUnit reporter is installed
+        run: npm install
       
-      # Generate test reports
-      - name: Run tests and generate reports
-        run: |
-          mkdir -p test-results # Create directory for reports
-          npm test -- --watchAll=false --ci --coverage --testResultsProcessor="jest-junit"
-        env:
-          CI: true
+      - name: Run tests
+        run: npm test -- --watchAll=false --ci
       
       - name: Run lint
         run: npm run lint
-      
-      # Only upload artifacts if they exist
-      - name: Check for coverage reports
-        id: check-coverage
-        run: |
-          if [ -d "coverage" ]; then
-            echo "coverage_exists=true" >> $GITHUB_OUTPUT
-          fi
-      
-      - name: Upload coverage report
-        if: steps.check-coverage.outputs.coverage_exists == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage/
-      
-      - name: Check for test results
-        id: check-junit
-        run: |
-          if [ -f "junit.xml" ]; then
-            echo "junit_exists=true" >> $GITHUB_OUTPUT
-          fi
-      
-      - name: Upload test results
-        if: steps.check-junit.outputs.junit_exists == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: junit.xml
