@@ -23,28 +23,46 @@ jobs:
           cache: 'npm'
       
       - name: Install dependencies
-        run: npm ci
+        run: |
+          npm install
+          npm install --save-dev jest-junit # Ensure JUnit reporter is installed
       
-      - name: Run tests with coverage
-        run: npm test -- --watchAll=false --ci --coverage --reporters=default --reporters=jest-junit
+      # Generate test reports
+      - name: Run tests and generate reports
+        run: |
+          mkdir -p test-results # Create directory for reports
+          npm test -- --watchAll=false --ci --coverage --testResultsProcessor="jest-junit"
         env:
           CI: true
       
       - name: Run lint
         run: npm run lint
       
+      # Only upload artifacts if they exist
+      - name: Check for coverage reports
+        id: check-coverage
+        run: |
+          if [ -d "coverage" ]; then
+            echo "coverage_exists=true" >> $GITHUB_OUTPUT
+          fi
+      
       - name: Upload coverage report
-        if: always()
+        if: steps.check-coverage.outputs.coverage_exists == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage/
-        continue-on-error: true  # Prevents job failure if no coverage
+      
+      - name: Check for test results
+        id: check-junit
+        run: |
+          if [ -f "junit.xml" ]; then
+            echo "junit_exists=true" >> $GITHUB_OUTPUT
+          fi
       
       - name: Upload test results
-        if: always()
+        if: steps.check-junit.outputs.junit_exists == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: junit.xml
-        continue-on-error: true  # Prevents job failure if no JUnit report
