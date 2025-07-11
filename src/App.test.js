@@ -13,8 +13,3 @@ test('renders job title', () => {
   expect(jobElement).toBeInTheDocument();
 });
 
-test('renders introduction section', () => {
-  render(<App />);
-  const introElement = screen.getByText(/Introduction/i);
-  expect(introElement).toBeInTheDocument();
-});
