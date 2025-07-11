@@ -16,13 +16,13 @@ jobs:
     
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [18]
     
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4  # Also updated to v4 (optional but recommended)
       
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4  # Updated to v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
@@ -40,7 +40,7 @@ jobs:
       
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4  # ✅ Updated to v4
         with:
           name: test-results
           path: |
