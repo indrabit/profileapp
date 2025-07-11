@@ -26,9 +26,7 @@ jobs:
         run: npm ci
       
       - name: Run tests with coverage
-        run: |
-          npm test -- --watchAll=false --ci --coverage
-          npm run test:report || true  # Only if you have custom reporting
+        run: npm test -- --watchAll=false --ci --coverage --reporters=default --reporters=jest-junit
         env:
           CI: true
       
@@ -41,10 +39,12 @@ jobs:
         with:
           name: coverage-report
           path: coverage/
+        continue-on-error: true  # Prevents job failure if no coverage
       
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-results
-          path: test-results.xml
+          path: junit.xml
+        continue-on-error: true  # Prevents job failure if no JUnit report
