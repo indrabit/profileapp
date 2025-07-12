@@ -37,7 +37,7 @@ const ProfileHeader = () => {
                     />
                     <div className="text-center mt-4">
                         <h1 className="text-3xl font-bold text-gray-900">Indra Shrestha</h1>
-                        <h2 className="text-lg text-blue-700 font-medium">Full Stack Developer</h2>
+                        <h2 className="text-lg text-blue-700 font-medium">Full Stack Developer | Cloud & DevOps Engineer</h2>
                         <p className="text-gray-600 mt-1">Coomera, Gold Coast, Australia </p>
                     </div>
                 </div>
