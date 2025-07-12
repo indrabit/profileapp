@@ -3,7 +3,7 @@ import React from 'react'
 const Career = () => {
   const careerHistory = [
     {
-      role: 'Software Developer',
+      role: 'Software Developer (Cloud & DevOps Focus)',
       company: 'Civil Safety',
       location: 'Gold Coast, Australia',
       duration: 'March 2023 - Present',
@@ -12,8 +12,9 @@ const Career = () => {
         'Integrated third-party libraries and APIs including payment systems (Stripe, PayPal)',
         'Managed database design, analysis, and optimization for scalable solutions',
         'Successfully deployed the Online Anytime hybrid app alongside its web platform',
+        'Scripting & Automation: PowerShell, VBScript, Bash, Python',
       ],
-      skills: ['React Native', 'React.js', 'PHP Laravel', 'MySQL', 'SQLite', 'Postman', 'jQuery', 'JavaScript', 'Bootstrap']
+      skills: ['React Native', 'React.js', 'PHP Laravel', 'MySQL', 'SQLite', 'Postman', 'jQuery', 'JavaScript', 'Bootstrap','AWS', 'GitHub', 'AWS S3', 'AWS CloudFormation', 'AWS EC2', 'Docker','CI/CD']
     },
     {
       role: 'Software Developer',
@@ -25,7 +26,7 @@ const Career = () => {
         'Contributed to the ezythree app project',
         'AWS configuration and deployment',
       ],
-      skills: ['React', 'Node.js', 'React Native', 'Postman', 'Strapi', 'Bootstrap', 'PostgreSQL', 'Cloud Console', 'Tailwind', 'AWS', 'GitHub']
+      skills: ['React', 'Node.js', 'React Native', 'Postman', 'Strapi', 'Bootstrap', 'PostgreSQL', 'Cloud Console', 'Tailwind', 'AWS', 'GitHub', 'AWS S3','AWS CloudFormation', 'AWS EC2']
     },
     {
       role: 'Analyst Programmer',
@@ -36,6 +37,7 @@ const Career = () => {
         'Developed web-based client software and resolved complex errors (invoice and transaction issues)',
         'Fixed bugs and implemented new features in existing projects',
         'Worked with project management tools and version control systems',
+        'Automated manual workflows via PowerShell scripts',
       ],
       skills: ['ASP.NET', 'C#.NET', 'Lambda Expressions', 'LINQ', 'jQuery', 'MS SQL Server', 'Jira', 'Backlog', 'SVN']
     },

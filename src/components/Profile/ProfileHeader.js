@@ -38,13 +38,13 @@ const ProfileHeader = () => {
                     <div className="text-center mt-4">
                         <h1 className="text-3xl font-bold text-gray-900">Indra Shrestha</h1>
                         <h2 className="text-lg text-blue-700 font-medium">Full Stack Developer</h2>
-                        <p className="text-gray-600 mt-1">Gold Coast, Australia | Australian Citizen</p>
+                        <p className="text-gray-600 mt-1">Coomera, Gold Coast, Australia </p>
                     </div>
                 </div>
             </div>
 
             {/* Navigation Tabs */}
-            <div className="px-4 md:px-6">
+            <div className="hidden sm:block px-4 md:px-6">
                 <div className="flex overflow-x-auto scrollbar-hide -mb-px">
                     {Menus.map((menu, i) => (
                         <button
@@ -64,7 +64,7 @@ const ProfileHeader = () => {
             </div>
 
             {/* Content Area */}
-            <div className="bg-white rounded-b-xl shadow-md overflow-hidden border border-gray-200">
+            <div className="bg-white rounded-b-xl shadow-md overflow-hidden border border-gray-200 mb-6">
                 <DataContext.Provider value={selected}>
                     <Profile />
                 </DataContext.Provider>

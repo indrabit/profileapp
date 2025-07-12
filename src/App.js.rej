@@ -1,9 +1,0 @@
-diff a/src/App.js b/src/App.js	(rejected hunks)
-@@ -3,7 +3,6 @@
- function App() {
-   return (
-     <div className="">
--      <Profile/>
-       <ProfileHeader/>
-     </div>
-   );
