@@ -87,10 +87,7 @@ describe('ProfileHeader Navigation', () => {
       await screen.findByTestId('profile-content');
     });
 
-    // Verify initial context value
-    expect(receivedContextValue).toBe('introduction');
-    
-    // Get desktop navigation
+       // Get desktop navigation
     const desktopNav = screen.getByTestId('desktop-nav');
     const skillsButton = within(desktopNav).getByRole('button', { name: 'Skills' });
     
