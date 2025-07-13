@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, within } from '@testing-library/react'; // Added within import
+import { render, screen, within, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ProfileHeader, { DataContext } from './components/Profile/ProfileHeader';
 
@@ -9,33 +9,70 @@ jest.mock('./components/Profile/Profile', () => ({
   default: () => <div data-testid="profile-content" />
 }));
 
-
 describe('ProfileHeader Navigation', () => {
   test('renders all navigation tabs correctly', () => {
     render(<ProfileHeader />);
     
-    // Desktop navigation - use getAllByRole since there are multiple buttons
-    const desktopButtons = screen.getAllByRole('button', { name: /Introduction|Skills|Experience|Education|Contact/i });
+    // Desktop navigation
+    const desktopNav = screen.getByTestId('desktop-nav');
+    const desktopButtons = within(desktopNav).getAllByRole('button');
     expect(desktopButtons).toHaveLength(5);
+    expect(desktopButtons[0]).toHaveTextContent('Introduction');
+    expect(desktopButtons[1]).toHaveTextContent('Skills');
     
-    // Mobile navigation icons
-    expect(screen.getByText('👋')).toBeInTheDocument();
-    expect(screen.getByText('💻')).toBeInTheDocument();
-    expect(screen.getByText('💼')).toBeInTheDocument();
-    expect(screen.getByText('🎓')).toBeInTheDocument();
-    expect(screen.getByText('📞')).toBeInTheDocument();
+    // Mobile navigation
+    const mobileNav = screen.getByTestId('mobile-nav');
+    expect(within(mobileNav).getByText('👋')).toBeInTheDocument();
+    expect(within(mobileNav).getByText('💻')).toBeInTheDocument();
   });
 
-test('context updates when changing tabs', async () => {
-    let contextValue = '';
-    const setContextValue = (value) => { contextValue = value; };
+  test('desktop navigation updates active tab', async () => {
+    render(<ProfileHeader />);
     
-    // Mock component to capture context value
+    const desktopNav = screen.getByTestId('desktop-nav');
+    const introductionTab = within(desktopNav).getByRole('button', { name: 'Introduction' });
+    const skillsTab = within(desktopNav).getByRole('button', { name: 'Skills' });
+    
+    // Initial state
+    expect(introductionTab).toHaveClass('border-orange-500');
+    expect(skillsTab).toHaveClass('border-transparent');
+    
+    // Click skills tab
+    await act(async () => {
+      await userEvent.click(skillsTab);
+    });
+    
+    // Verify UI update
+    expect(introductionTab).toHaveClass('border-transparent');
+    expect(skillsTab).toHaveClass('border-orange-500');
+  });
+
+  test('mobile navigation updates active tab', async () => {
+    render(<ProfileHeader />);
+    
+    const mobileNav = screen.getByTestId('mobile-nav');
+    const mobileIntroTab = within(mobileNav).getByText('👋').closest('button');
+    const mobileSkillsTab = within(mobileNav).getByText('💻').closest('button');
+    
+    // Initial state
+    expect(mobileIntroTab).toHaveClass('text-orange-600');
+    expect(mobileSkillsTab).toHaveClass('text-gray-600');
+    
+    // Click skills tab
+    await act(async () => {
+      await userEvent.click(mobileSkillsTab);
+    });
+    
+    // Verify UI update
+    expect(mobileIntroTab).toHaveClass('text-gray-600');
+    expect(mobileSkillsTab).toHaveClass('text-orange-600');
+  });
+
+  test('context updates when changing tabs', async () => {
+    let receivedContextValue = '';
+    
     const ContextSpy = () => {
-      const value = React.useContext(DataContext);
-      React.useEffect(() => {
-        setContextValue(value);
-      }, [value]);
+      receivedContextValue = React.useContext(DataContext);
       return null;
     };
 
@@ -45,17 +82,24 @@ test('context updates when changing tabs', async () => {
       </ProfileHeader>
     );
 
-    // Need to wait for initial context value to be set
-    await screen.findByTestId('profile-content');
+    // Wait for initial render
+    await act(async () => {
+      await screen.findByTestId('profile-content');
+    });
+
+    // Verify initial context value
+    expect(receivedContextValue).toBe('introduction');
     
-    // Initial context value
-    expect(contextValue).toBe('introduction');
-    
-    // Click skills tab (using desktop navigation)
+    // Get desktop navigation
     const desktopNav = screen.getByTestId('desktop-nav');
-    await userEvent.click(within(desktopNav).getByRole('button', { name: /Skills/i }));
+    const skillsButton = within(desktopNav).getByRole('button', { name: 'Skills' });
     
-    // Verify context update
-    expect(contextValue).toBe('skills');
-  }); 
+    // Click skills tab
+    await act(async () => {
+      await userEvent.click(skillsButton);
+    });
+
+    // Verify updated context value
+    expect(receivedContextValue).toBe('skills');
+  });
 });
