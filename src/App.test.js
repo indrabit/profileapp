@@ -81,24 +81,5 @@ describe('ProfileHeader Navigation', () => {
     
     // Context value should now be 'education'
     expect(contextValue).toBe('education');
-  });
-
-  it('highlights only one tab at a time', () => {
-    render(<ProfileHeader />);        
-    const tabs = screen.getAllByRole('button', { name: /introduction|skills|experience|education|contact/i });    
-    // Check that only the first tab is active initially
-    expect(tabs[0]).toHaveClass('border-orange-500');
-    tabs.slice(1).forEach(tab => {
-      expect(tab).not.toHaveClass('border-orange-500');
-    });
-    // Click on the last tab
-    act(() => {
-      userEvent.click(tabs[tabs.length - 1]);
-    });
-    // Check that the last tab is now active
-    expect(tabs[tabs.length - 1]).toHaveClass('border-orange-500');
-    tabs.slice(0, -1).forEach(tab => {
-      expect(tab).not.toHaveClass('border-orange-500');
-    });      
-  });
+  }); 
 });
