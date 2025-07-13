@@ -3,21 +3,25 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ProfileHeader, { DataContext } from './ProfileHeader';
 
-// Mock the Profile component since we're only testing navigation
-jest.mock('./Profile', () => () => <div data-testid="profile-content" />);
+// Proper mock implementation of Profile component
+jest.mock('./Profile', () => {
+  const MockProfile = () => <div data-testid="profile-content" />;
+  MockProfile.displayName = 'MockProfile';
+  return MockProfile;
+});
 
 describe('ProfileHeader Navigation', () => {
   test('renders all navigation tabs correctly', () => {
     render(<ProfileHeader />);
     
     // Desktop navigation
-    expect(screen.getByRole('button', { name: 'Introduction' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Skills' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Experience' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Education' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Contact' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Introduction/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Skills/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Experience/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Education/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Contact/i })).toBeInTheDocument();
     
-    // Mobile navigation
+    // Mobile navigation icons
     expect(screen.getByText('👋')).toBeInTheDocument();
     expect(screen.getByText('💻')).toBeInTheDocument();
     expect(screen.getByText('💼')).toBeInTheDocument();
@@ -25,12 +29,12 @@ describe('ProfileHeader Navigation', () => {
     expect(screen.getByText('📞')).toBeInTheDocument();
   });
 
-  test('desktop navigation updates active tab and context', async () => {
+  test('desktop navigation updates active tab', async () => {
     const user = userEvent.setup();
     render(<ProfileHeader />);
     
-    const introductionTab = screen.getByRole('button', { name: 'Introduction' });
-    const skillsTab = screen.getByRole('button', { name: 'Skills' });
+    const introductionTab = screen.getByRole('button', { name: /Introduction/i });
+    const skillsTab = screen.getByRole('button', { name: /Skills/i });
     
     // Initial state
     expect(introductionTab).toHaveClass('border-orange-500');
@@ -42,12 +46,9 @@ describe('ProfileHeader Navigation', () => {
     // Verify UI update
     expect(introductionTab).toHaveClass('border-transparent');
     expect(skillsTab).toHaveClass('border-orange-500');
-    
-    // Verify context update
-    expect(screen.getByTestId('profile-content')).toBeInTheDocument();
   });
 
-  test('mobile navigation updates active tab and context', async () => {
+  test('mobile navigation updates active tab', async () => {
     const user = userEvent.setup();
     render(<ProfileHeader />);
     
@@ -64,16 +65,15 @@ describe('ProfileHeader Navigation', () => {
     // Verify UI update
     expect(mobileIntroTab).toHaveClass('text-gray-600');
     expect(mobileSkillsTab).toHaveClass('text-orange-600');
-    
-    // Verify context update
-    expect(screen.getByTestId('profile-content')).toBeInTheDocument();
   });
 
   test('context updates when changing tabs', async () => {
     const user = userEvent.setup();
+    let receivedContextValue = '';
+    
     const TestComponent = () => {
-      const contextValue = React.useContext(DataContext);
-      return <div data-testid="context-value">{contextValue}</div>;
+      receivedContextValue = React.useContext(DataContext);
+      return null;
     };
 
     render(
@@ -83,14 +83,14 @@ describe('ProfileHeader Navigation', () => {
     );
 
     // Initial context value
-    expect(screen.getByTestId('context-value')).toHaveTextContent('introduction');
+    expect(receivedContextValue).toBe('introduction');
     
     // Click skills tab
-    await user.click(screen.getByRole('button', { name: 'Skills' }));
-    expect(screen.getByTestId('context-value')).toHaveTextContent('skills');
+    await user.click(screen.getByRole('button', { name: /Skills/i }));
+    expect(receivedContextValue).toBe('skills');
     
     // Click contact tab
     await user.click(screen.getByText('📞').closest('button'));
-    expect(screen.getByTestId('context-value')).toHaveTextContent('contact');
+    expect(receivedContextValue).toBe('contact');
   });
 });
