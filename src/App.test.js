@@ -1,8 +1,14 @@
 import React from 'react';
-import { render, screen, within, act } from '@testing-library/react';
+import { render, screen, within, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ProfileHeader, { DataContext } from './components/Profile/ProfileHeader';
-import { tab } from '@testing-library/user-event/dist/tab';
+
+// Mock the Profile component
+jest.mock('./components/Profile/Profile', () => ({
+  __esModule: true,
+  default: () => <div data-testid="profile-content" />
+}));
+
 describe('ProfileHeader Navigation', () => {
   const mockMenus = [
     { name: "introduction", value: 'Introduction' },
@@ -16,70 +22,81 @@ describe('ProfileHeader Navigation', () => {
     render(<ProfileHeader />);
     
     // Check desktop navigation
+    const desktopNav = screen.getByTestId('desktop-nav');
     mockMenus.forEach(menu => {
-      expect(screen.getByText(menu.value)).toBeInTheDocument();
+      expect(within(desktopNav).getByText(menu.value)).toBeInTheDocument();
     });
     
     // Check mobile navigation icons
-    expect(screen.getByText('👋')).toBeInTheDocument();
-    expect(screen.getByText('💻')).toBeInTheDocument();
-    expect(screen.getByText('💼')).toBeInTheDocument();
-    expect(screen.getByText('🎓')).toBeInTheDocument();
-    expect(screen.getByText('📞')).toBeInTheDocument();
+    const mobileNav = screen.getByTestId('mobile-nav');
+    expect(within(mobileNav).getByText('👋')).toBeInTheDocument();
+    expect(within(mobileNav).getByText('💻')).toBeInTheDocument();
+    expect(within(mobileNav).getByText('💼')).toBeInTheDocument();
+    expect(within(mobileNav).getByText('🎓')).toBeInTheDocument();
+    expect(within(mobileNav).getByText('📞')).toBeInTheDocument();
   });
 
   it('sets the active tab correctly when clicked (desktop)', () => {
     render(<ProfileHeader />);
     
+    const desktopNav = screen.getByTestId('desktop-nav');
+    const introductionTab = within(desktopNav).getByText('Introduction');
+    const skillsTab = within(desktopNav).getByText('Skills');
+    
     // Initial active tab should be Introduction
-    const introductionTab = screen.getByText('Introduction');
     expect(introductionTab).toHaveClass('border-orange-500');
+    expect(skillsTab).toHaveClass('border-transparent');
     
     // Click on Skills tab
-    const skillsTab = screen.getByText('Skills');
     fireEvent.click(skillsTab);
     
     // Skills tab should now be active
     expect(skillsTab).toHaveClass('border-orange-500');
-    expect(introductionTab).not.toHaveClass('border-orange-500');
+    expect(introductionTab).toHaveClass('border-transparent');
   });
 
   it('sets the active tab correctly when clicked (mobile)', () => {
     render(<ProfileHeader />);
     
+    const mobileNav = screen.getByTestId('mobile-nav');
+    const introductionIcon = within(mobileNav).getByText('👋').closest('button');
+    const experienceIcon = within(mobileNav).getByText('💼').closest('button');
+    
     // Initial active tab should be Introduction (👋)
-    const introductionIcon = screen.getByText('👋').closest('button');
     expect(introductionIcon).toHaveClass('text-orange-600');
+    expect(experienceIcon).toHaveClass('text-gray-600');
     
     // Click on Experience tab (💼)
-    const experienceIcon = screen.getByText('💼').closest('button');
     fireEvent.click(experienceIcon);
     
     // Experience tab should now be active
     expect(experienceIcon).toHaveClass('text-orange-600');
-    expect(introductionIcon).not.toHaveClass('text-orange-600');
+    expect(introductionIcon).toHaveClass('text-gray-600');
   });
 
   it('updates the DataContext value when a tab is clicked', () => {
-    let contextValue;
+    let contextValue = '';
     
+    const ContextSpy = () => {
+      contextValue = React.useContext(DataContext);
+      return null;
+    };
+
     render(
-      <DataContext.Consumer>
-        {value => {
-          contextValue = value;
-          return <ProfileHeader />;
-        }}
-      </DataContext.Consumer>
+      <ProfileHeader>
+        <ContextSpy />
+      </ProfileHeader>
     );
-    
+
     // Initial context value should be 'introduction'
     expect(contextValue).toBe('introduction');
     
     // Click on Education tab
-    const educationTab = screen.getByText('Education');
+    const desktopNav = screen.getByTestId('desktop-nav');
+    const educationTab = within(desktopNav).getByText('Education');
     fireEvent.click(educationTab);
     
     // Context value should now be 'education'
     expect(contextValue).toBe('education');
-  }); 
+  });
 });
