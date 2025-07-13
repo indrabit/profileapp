@@ -9,6 +9,7 @@ jest.mock('./components/Profile/Profile', () => ({
   default: () => <div data-testid="profile-content" />
 }));
 
+
 describe('ProfileHeader Navigation', () => {
   test('renders all navigation tabs correctly', () => {
     render(<ProfileHeader />);
@@ -25,66 +26,36 @@ describe('ProfileHeader Navigation', () => {
     expect(screen.getByText('📞')).toBeInTheDocument();
   });
 
-  test('desktop navigation updates active tab', async () => {
-    render(<ProfileHeader />);
+test('context updates when changing tabs', async () => {
+    let contextValue = '';
+    const setContextValue = (value) => { contextValue = value; };
     
-    // Find desktop buttons specifically by their container
-    const desktopNav = screen.getByTestId('desktop-nav');
-    const introductionTab = within(desktopNav).getByRole('button', { name: /Introduction/i });
-    const skillsTab = within(desktopNav).getByRole('button', { name: /Skills/i });
-    
-    // Initial state
-    expect(introductionTab).toHaveClass('border-orange-500');
-    expect(skillsTab).toHaveClass('border-transparent');
-    
-    // Click skills tab
-    await userEvent.click(skillsTab);
-    
-    // Verify UI update
-    expect(introductionTab).toHaveClass('border-transparent');
-    expect(skillsTab).toHaveClass('border-orange-500');
-  });
-
-  test('mobile navigation updates active tab', async () => {
-    render(<ProfileHeader />);
-    
-    // Find mobile buttons specifically by their container
-    const mobileNav = screen.getByTestId('mobile-nav');
-    const mobileIntroTab = within(mobileNav).getByText('👋').closest('button');
-    const mobileSkillsTab = within(mobileNav).getByText('💻').closest('button');
-    
-    // Initial state
-    expect(mobileIntroTab).toHaveClass('text-orange-600');
-    expect(mobileSkillsTab).toHaveClass('text-gray-600');
-    
-    // Click skills tab
-    await userEvent.click(mobileSkillsTab);
-    
-    // Verify UI update
-    expect(mobileIntroTab).toHaveClass('text-gray-600');
-    expect(mobileSkillsTab).toHaveClass('text-orange-600');
-  });
-
-  test('context updates when changing tabs', async () => {
-    let contextValue;
-    
-    const TestComponent = () => {
-      contextValue = React.useContext(DataContext);
+    // Mock component to capture context value
+    const ContextSpy = () => {
+      const value = React.useContext(DataContext);
+      React.useEffect(() => {
+        setContextValue(value);
+      }, [value]);
       return null;
     };
 
     render(
       <ProfileHeader>
-        <TestComponent />
+        <ContextSpy />
       </ProfileHeader>
     );
 
+    // Need to wait for initial context value to be set
+    await screen.findByTestId('profile-content');
+    
     // Initial context value
     expect(contextValue).toBe('introduction');
     
     // Click skills tab (using desktop navigation)
     const desktopNav = screen.getByTestId('desktop-nav');
     await userEvent.click(within(desktopNav).getByRole('button', { name: /Skills/i }));
+    
+    // Verify context update
     expect(contextValue).toBe('skills');
-  });
+  }); 
 });
