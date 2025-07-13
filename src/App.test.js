@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react'; // Added within import
 import userEvent from '@testing-library/user-event';
 import ProfileHeader, { DataContext } from './components/Profile/ProfileHeader';
 
@@ -26,7 +26,6 @@ describe('ProfileHeader Navigation', () => {
   });
 
   test('desktop navigation updates active tab', async () => {
-    // For older versions of user-event, don't use setup()
     render(<ProfileHeader />);
     
     // Find desktop buttons specifically by their container
