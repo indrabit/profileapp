@@ -91,14 +91,14 @@ describe('ProfileHeader Navigation', () => {
     tabs.slice(1).forEach(tab => {
       expect(tab).not.toHaveClass('border-orange-500');
     });
-    
     // Click on the last tab
-    fireEvent.click(tabs[tabs.length - 1]);
-    
-    // Now only the last tab should be active
+    act(() => {
+      userEvent.click(tabs[tabs.length - 1]);
+    });
+    // Check that the last tab is now active
     expect(tabs[tabs.length - 1]).toHaveClass('border-orange-500');
     tabs.slice(0, -1).forEach(tab => {
       expect(tab).not.toHaveClass('border-orange-500');
-    });
+    });      
   });
 });
