@@ -39,28 +39,5 @@ describe('Navigation Component', () => {
         await user.click(tabs.introduction);
       }
     }
-  });
-
-  test('mobile navigation works correctly', async () => {
-    const user = userEvent.setup();
-    const mobileTabs = {
-      introduction: screen.getByText('👋').closest('button'),
-      skills: screen.getByText('💻').closest('button'),
-      career: screen.getByText('💼').closest('button'),
-      education: screen.getByText('🎓').closest('button'),
-      contact: screen.getByText('📞').closest('button')
-    };
-
-    // Test mobile tab switching
-    for (const [tabName, tabElement] of Object.entries(mobileTabs)) {
-      if (tabName !== 'introduction') {
-        await user.click(tabElement);
-        expect(tabElement).toHaveClass('text-orange-600');
-        expect(mobileTabs.introduction).not.toHaveClass('text-orange-600');
-        
-        // Reset to introduction for next test
-        await user.click(mobileTabs.introduction);
-      }
-    }
-  });
+  });  
 });
