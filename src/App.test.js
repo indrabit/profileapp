@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import ProfileHeader, { DataContext } from './ProfileHeader';
+import ProfileHeader, { DataContext } from './components/Profile/ProfileHeader';
 
 // Mock the Profile component with proper path
 jest.mock('./components/Profile/Profile', () => {
