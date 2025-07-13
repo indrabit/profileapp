@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, within, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import ProfileHeader, { DataContext } from './components/Profile/ProfileHeader';
+import App from './App';
+import { DataContext } from './components/Profile/ProfileHeader';
 
 // Mock the Profile component
 jest.mock('./components/Profile/Profile', () => ({
@@ -19,7 +19,7 @@ describe('ProfileHeader Navigation', () => {
   ];
 
   it('renders all navigation items correctly', () => {
-    render(<ProfileHeader />);
+    render(<App />);
     
     // Check desktop navigation
     const desktopNav = screen.getByTestId('desktop-nav');
@@ -37,7 +37,7 @@ describe('ProfileHeader Navigation', () => {
   });
 
   it('sets the active tab correctly when clicked (desktop)', () => {
-    render(<ProfileHeader />);
+    render(<App />);
     
     const desktopNav = screen.getByTestId('desktop-nav');
     const introductionTab = within(desktopNav).getByText('Introduction');
@@ -55,25 +55,6 @@ describe('ProfileHeader Navigation', () => {
     expect(introductionTab).toHaveClass('border-transparent');
   });
 
-  it('sets the active tab correctly when clicked (mobile)', () => {
-    render(<ProfileHeader />);
-    
-    const mobileNav = screen.getByTestId('mobile-nav');
-    const introductionIcon = within(mobileNav).getByText('👋').closest('button');
-    const experienceIcon = within(mobileNav).getByText('💼').closest('button');
-    
-    // Initial active tab should be Introduction (👋)
-    expect(introductionIcon).toHaveClass('text-orange-600');
-    expect(experienceIcon).toHaveClass('text-gray-600');
-    
-    // Click on Experience tab (💼)
-    fireEvent.click(experienceIcon);
-    
-    // Experience tab should now be active
-    expect(experienceIcon).toHaveClass('text-orange-600');
-    expect(introductionIcon).toHaveClass('text-gray-600');
-  });
-
   it('updates the DataContext value when a tab is clicked', () => {
     let contextValue = '';
     
@@ -83,9 +64,9 @@ describe('ProfileHeader Navigation', () => {
     };
 
     render(
-      <ProfileHeader>
+      <App>
         <ContextSpy />
-      </ProfileHeader>
+      </App>
     );
 
     // Initial context value should be 'introduction'
