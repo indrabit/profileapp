@@ -79,7 +79,7 @@ describe('ProfileHeader Navigation', () => {
     
     const ContextSpy = () => {
       contextValue = React.useContext(DataContext);
-      return null;
+      return contextValue;
     };
 
     render(

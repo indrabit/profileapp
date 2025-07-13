@@ -44,7 +44,7 @@ const ProfileHeader = () => {
             </div>
 
             {/* Navigation Tabs */}
-            <div className="hidden sm:block px-4 md:px-6">
+            <div className="hidden sm:block px-4 md:px-6" data-testid="desktop-nav">
                 <div className="flex overflow-x-auto scrollbar-hide -mb-px">
                     {Menus.map((menu, i) => (
                         <button
@@ -71,7 +71,7 @@ const ProfileHeader = () => {
             </div>
 
             {/* Mobile bottom navigation */}
-            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 flex justify-around py-2">
+            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg border-t border-gray-200 flex justify-around py-2" data-testid="mobile-nav">
                 {Menus.map((menu, i) => (
                     <button
                         key={i}
