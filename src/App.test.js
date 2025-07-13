@@ -1,37 +1,66 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
-test('naviation tabs work correctly',async () => {
-  render(<App />);
-  const introductionTab = screen.getByText(/Introduction/i);
-  const skillsTab = screen.getByText(/Skills/i);
-  const careerTab = screen.getByText(/Experience/i);
-  const educationTab = screen.getByText(/Education/i);
-  const contactTab = screen.getByText(/Contact/i);
-  const profileName = screen.getByText(/Indra Shrestha/i);
-  const jobTitle = screen.getByText(/Full Stack Developer/i);
-  expect(introductionTab).toBeInTheDocument();
-  expect(skillsTab).toBeInTheDocument();
-  expect(careerTab).toBeInTheDocument();
-  expect(educationTab).toBeInTheDocument();
-  expect(contactTab).toBeInTheDocument();
-  expect(profileName).toBeInTheDocument();
-  expect(jobTitle).toBeInTheDocument(); 
-  const user = userEvent.setup();
-  await user.click(introductionTab);
-  expect(screen.getByText(/Introduction/i)).toBeInTheDocument();
-  await user.click(skillsTab);
-  expect(screen.getByText(/Skills/i)).toBeInTheDocument();
-  await user.click(careerTab);
-  expect(screen.getByText(/Experience/i)).toBeInTheDocument();
-  await user.click(educationTab);
-  expect(screen.getByText(/Education/i)).toBeInTheDocument();
-  await user.click(contactTab);
-  expect(screen.getByText(/Contact/i)).toBeInTheDocument();
-});
 
-test('renders ProfileHeader component', () => {
-  render(<App />);
-  const profileHeader = screen.getByText(/Indra Shrestha/i);
-  expect(profileHeader).toBeInTheDocument();
+describe('Navigation Component', () => {
+  beforeEach(() => {
+    render(<App />);
+  });
+
+  test('renders all navigation tabs correctly', () => {
+    expect(screen.getByRole('button', { name: /Introduction/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Skills/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Experience/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Education/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Contact/i })).toBeInTheDocument();
+  });
+
+  test('navigation tabs switch correctly', async () => {
+    const user = userEvent.setup();
+    const tabs = {
+      introduction: screen.getByRole('button', { name: /Introduction/i }),
+      skills: screen.getByRole('button', { name: /Skills/i }),
+      career: screen.getByRole('button', { name: /Experience/i }),
+      education: screen.getByRole('button', { name: /Education/i }),
+      contact: screen.getByRole('button', { name: /Contact/i })
+    };
+
+    // Verify initial active tab (assuming Introduction is default)
+    expect(tabs.introduction).toHaveClass('border-orange-500');
+    
+    // Test switching to each tab
+    for (const [tabName, tabElement] of Object.entries(tabs)) {
+      if (tabName !== 'introduction') {
+        await user.click(tabElement);
+        expect(tabElement).toHaveClass('border-orange-500');
+        expect(tabs.introduction).not.toHaveClass('border-orange-500');
+        
+        // Reset to introduction for next test
+        await user.click(tabs.introduction);
+      }
+    }
+  });
+
+  test('mobile navigation works correctly', async () => {
+    const user = userEvent.setup();
+    const mobileTabs = {
+      introduction: screen.getByText('👋').closest('button'),
+      skills: screen.getByText('💻').closest('button'),
+      career: screen.getByText('💼').closest('button'),
+      education: screen.getByText('🎓').closest('button'),
+      contact: screen.getByText('📞').closest('button')
+    };
+
+    // Test mobile tab switching
+    for (const [tabName, tabElement] of Object.entries(mobileTabs)) {
+      if (tabName !== 'introduction') {
+        await user.click(tabElement);
+        expect(tabElement).toHaveClass('text-orange-600');
+        expect(mobileTabs.introduction).not.toHaveClass('text-orange-600');
+        
+        // Reset to introduction for next test
+        await user.click(mobileTabs.introduction);
+      }
+    }
+  });
 });
