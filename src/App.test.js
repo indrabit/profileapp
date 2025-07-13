@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, within, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ProfileHeader, { DataContext } from './components/Profile/ProfileHeader';
+import { tab } from '@testing-library/user-event/dist/tab';
 describe('ProfileHeader Navigation', () => {
   const mockMenus = [
     { name: "introduction", value: 'Introduction' },
@@ -84,8 +85,7 @@ describe('ProfileHeader Navigation', () => {
 
   it('highlights only one tab at a time', () => {
     render(<ProfileHeader />);        
-    const tabs = mockMenus.map(menu => screen.getByText(menu.name));
-    
+    const tabs = screen.getAllByRole('button', { name: /introduction|skills|experience|education|contact/i });    
     // Check that only the first tab is active initially
     expect(tabs[0]).toHaveClass('border-orange-500');
     tabs.slice(1).forEach(tab => {
