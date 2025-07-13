@@ -3,8 +3,8 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ProfileHeader, { DataContext } from './ProfileHeader';
 
-// Proper mock implementation of Profile component
-jest.mock('./Profile', () => {
+// Mock the Profile component with proper path
+jest.mock('./components/Profile/Profile', () => {
   const MockProfile = () => <div data-testid="profile-content" />;
   MockProfile.displayName = 'MockProfile';
   return MockProfile;
@@ -21,7 +21,7 @@ describe('ProfileHeader Navigation', () => {
     expect(screen.getByRole('button', { name: /Education/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Contact/i })).toBeInTheDocument();
     
-    // Mobile navigation icons
+    // Mobile navigation
     expect(screen.getByText('👋')).toBeInTheDocument();
     expect(screen.getByText('💻')).toBeInTheDocument();
     expect(screen.getByText('💼')).toBeInTheDocument();
@@ -69,10 +69,10 @@ describe('ProfileHeader Navigation', () => {
 
   test('context updates when changing tabs', async () => {
     const user = userEvent.setup();
-    let receivedContextValue = '';
+    let contextValue;
     
     const TestComponent = () => {
-      receivedContextValue = React.useContext(DataContext);
+      contextValue = React.useContext(DataContext);
       return null;
     };
 
@@ -83,14 +83,14 @@ describe('ProfileHeader Navigation', () => {
     );
 
     // Initial context value
-    expect(receivedContextValue).toBe('introduction');
+    expect(contextValue).toBe('introduction');
     
     // Click skills tab
     await user.click(screen.getByRole('button', { name: /Skills/i }));
-    expect(receivedContextValue).toBe('skills');
+    expect(contextValue).toBe('skills');
     
     // Click contact tab
     await user.click(screen.getByText('📞').closest('button'));
-    expect(receivedContextValue).toBe('contact');
+    expect(contextValue).toBe('contact');
   });
 });
